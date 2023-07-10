@@ -1,0 +1,32 @@
+body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#buttons{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+}
+
+.results{
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    align-items: center;
+    margin: 32px;
+}
+
+#game{
+    border: 2px solid black;
+    margin-bottom: 16px;
+    padding: 16px;
+}
+
+img{
+    height: 50px;
+    width: 50px;
+}

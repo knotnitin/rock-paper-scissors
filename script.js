@@ -1,4 +1,34 @@
+let playerWins = 0
+let computerWins = 0
+let playerChoice = ""
+let compChoice = ""
+
+const buttons = document.querySelectorAll('.btn')
+const player = document.querySelector('.player')
+const computer = document.querySelector('.computer')
+const game = document.querySelector('#game')
+game.textContent = "Click one of the buttons below to make a choice"
+
+buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+        // Checks what button was clicked
+        if(button.id == 'rock'){
+            playerChoice = "rock"
+        }
+        else if(button.id == 'paper'){
+            playerChoice = "paper"
+        }
+        else if(button.id == 'scissors'){
+            playerChoice = "scissors"
+        }
+        // Get computer's choice and find result
+        compChoice = getComputerChoice()
+        playGame()
+      })
+})
+
 function getComputerChoice(){
+    // Generates computer's choice
     let choice = Math.floor(Math.random() * (2 - 0 + 1) ) + 0;
     if(choice == 1){
         return "rock"
@@ -11,62 +41,48 @@ function getComputerChoice(){
     }
 }
 
-function game(){
-    function playRound(){
-        function validateChoice(choice){
-            return (choice == "rock" || choice == "paper" || choice == "scissors");
-        }
-    
-        function compare(player, computer){
-            let outcome = ""
-            if(player == computer){
-                outcome = "draw"
-            }
-            else if(player == "rock" && computer == "scissors" || player == "paper" && computer == "rock" || player == "scissors" && computer == "paper"){
-                outcome = "player"
-            }
-            else{
-                outcome = "computer"
-            }
-            return outcome
-        }
-    
-    
-        let computerChoice = getComputerChoice();
-        let playerChoice = prompt("Enter your choice of Rock, Paper or Scissors:").toLowerCase()
-        // alert(validateChoice(playerChoice))
-        while(validateChoice(playerChoice) == false){
-            playerChoice = prompt("ERROR: Enter your choice of Rock, Paper or Scissors:").toLowerCase()
-        }
-        // alert(computerChoice + ", " + playerChoice)
-        let outcome = compare(playerChoice, computerChoice)
-        // alert("Winner is " + outcome)
-        return outcome
-    }
-
-    // Play until someone reaches 5 wins
-    let playerWins = 0
-    let computerWins = 0
-    while(playerWins < 5 && computerWins < 5){
-        let outcome = playRound()
-        if(outcome == "player"){
-            playerWins++
-            alert("Player wins! Player: " + playerWins + ", Computer: " + computerWins)
-        }
-        else if(outcome == "computer"){
-            computerWins++
-            alert("Computer wins! Player: " + playerWins + ", Computer: " + computerWins)
-        }
-        else{
-            alert("It's a draw! Player: " + playerWins + ", Computer: " + computerWins)
-        }
-    }
-    if(playerWins > computerWins){
-        alert("Congratulations! You won!")
-    }
-    else{
-        alert("Oh no! Looks like the computer won....")
-    }
+function setScores(){
+    // Updates the scores on the screen, this function just makes things look better when a new game is played
+    player.textContent = `Player Score: ${playerWins}`
+    computer.textContent = `Computer Score: ${computerWins}`
 }
 
-game();
+function playGame(){
+    // Compare's both players' choices and returns the winner
+    let outcome = ""
+    if(playerChoice == compChoice){
+        outcome = "draw"
+    }
+    else if(playerChoice == "rock" && compChoice == "scissors" || playerChoice == "paper" && compChoice == "rock" || playerChoice == "scissors" && compChoice == "paper"){
+        outcome = "player"
+    }
+    else{
+        outcome = "computer"
+    }
+
+    // Reveal the outcomes
+    if(outcome == "player"){
+        game.textContent = `You chose ${playerChoice} and the computer chose ${compChoice}. You win!`
+        playerWins++
+    }
+    else if(outcome == "computer"){
+        game.textContent = `You chose ${playerChoice} but the computer chose ${compChoice}. You lose...`
+        computerWins++
+    }
+    else{
+        game.textContent = `You chose ${playerChoice} and the computer chose ${compChoice}. It's a draw!`
+    }
+    setScores()
+
+    // Check for a winner
+    if(playerWins == 5){
+        game.textContent = `You win! Click one of the buttons to go again!`
+        playerWins = 0
+        computerWins = 0
+    }
+    else if(computerWins == 5){
+        game.textContent = `You lost... Click one of the buttons to go again!`
+        playerWins = 0
+        computerWins = 0
+    }
+}
